@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.loading-screen {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  font-family: 'Inter', sans-serif;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 1.2rem;
+}

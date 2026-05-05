@@ -1,23 +1,123 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import HomePage from './user/components/HomePage';
+import TrackingPage from './user/components/TrackingPage';
+import AdminLogin from './admin/components/AdminLogin';
+import AdminDashboard from './admin/components/AdminDashboard';
+import ProtectedRoute from './admin/components/ProtectedRoute';
+import SupportButton from './user/components/SupportButton';
+import { db, auth } from './firebase';
+import { collection, onSnapshot, query, orderBy, addDoc, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { packagesData } from './data/packages';
 import './App.css';
 
 function App() {
+  const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [authUser, setAuthUser] = useState(null);
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    // Auth Listener
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      setAuthUser(user);
+    });
+
+    const q = query(collection(db, "packages"), orderBy("id", "desc"));
+
+    // Check if initial seed is needed (optional)
+    const checkAndSeed = async () => {
+      try {
+        const snapshot = await getDocs(q);
+        if (snapshot.empty) {
+          console.log("No demo data needed - production ready");
+        }
+      } catch (err) {
+        console.error("Database check error:", err);
+        if (err.code === 'permission-denied') {
+          setError("Firebase Permission Denied. Please update your Firestore Rules in the Firebase Console.");
+        }
+      }
+    };
+    checkAndSeed();
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const pkgs = snapshot.docs.map(doc => ({
+        firestoreId: doc.id,
+        ...doc.data()
+      }));
+      setPackages(pkgs);
+      setLoading(false);
+      setError(null);
+    }, (err) => {
+      console.error("Firestore error:", err);
+      if (err.code === 'permission-denied') {
+        setError("Missing or insufficient permissions. Have you updated your Firestore Rules to 'allow read, write: if true;' in the Firebase console?");
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+      unsubscribeAuth();
+    };
+  }, []);
+
+  if (error) {
+    return (
+      <div className="loading-screen" style={{ flexDirection: 'column', textAlign: 'center', padding: '2rem' }}>
+        <h2 style={{ color: '#dc3545' }}>⚠️ Firebase Permission Error</h2>
+        <p style={{ maxWidth: '600px', margin: '1rem 0', lineHeight: '1.6' }}>{error}</p>
+        <div style={{ background: '#eee', padding: '1rem', borderRadius: '8px', textAlign: 'left', fontSize: '0.9rem' }}>
+          <strong>Action Required:</strong><br />
+          1. Go to Firebase Console &gt; Firestore Database &gt; Rules.<br />
+          2. Set rules to:<br />
+          <pre style={{ background: '#333', color: '#fff', padding: '0.5rem', marginTop: '0.5rem' }}>
+            {"allow read, write: if true;"}
+          </pre>
+        </div>
+        <button onClick={() => window.location.reload()} style={{ marginTop: '1.5rem', padding: '0.8rem 1.5rem', background: '#0d6efd', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+          I've updated the rules, reload app
+        </button>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <div className="loading-screen">Loading FluxExpress Dashboard...</div>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        {/* User Routes */}
+        <Route path="/" element={<HomePage packages={packages} />} />
+        <Route path="/track/:code" element={<TrackingPage packages={packages} />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute user={authUser}>
+              <AdminDashboard packages={packages} />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+
+        {/* Fallback */}
+        <Route path="*" element={<HomePage packages={packages} />} />
+      </Routes>
+      {!isAdminPath && (() => {
+        // Extract tracking code from /track/:code URL
+        const match = location.pathname.match(/^\/track\/(.+)$/);
+        const code = match ? match[1] : null;
+        return <SupportButton trackingCode={code} />;
+      })()}
     </div>
   );
 }
