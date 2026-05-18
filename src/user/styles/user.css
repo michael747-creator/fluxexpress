@@ -2,20 +2,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #60a5fa;
-    /* Bright Sky Blue */
-    --primary-dark: #3b82f6;
+    /* Light, modern theme */
+    --primary: #2563eb;
+    /* Blue */
+    --primary-dark: #1d4ed8;
     --secondary: #0f172a;
-    /* Deep Slate Navy */
+
     --accent: #1e293b;
-    --text-main: #f8fafc;
-    --text-muted: #e2e8f0;
-    --text-dim: #cbd5e1;
-    --bg-dark: #0b0f19;
-    /* Professional Deep Charcoal/Navy */
-    --glass: rgba(255, 255, 255, 0.02);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --gradient-hero: radial-gradient(circle at top right, #1e1b4b, #0b0f19);
+
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+
+    --bg-dark: #ffffff;
+
+    --glass: rgba(15, 23, 42, 0.03);
+    --glass-border: rgba(15, 23, 42, 0.10);
+
+    --gradient-hero: radial-gradient(circle at top right, #dbeafe, #ffffff);
 }
 
 body {
@@ -805,10 +809,33 @@ h3,
         height: 70px;
     }
 
+    .navbar-hamburger {
+        display: inline-flex;
+    }
+
     .navbar-links {
         display: none;
-        /* Hide links on mobile for simplicity, or could add a hamburger */
+        /* Hidden by default; toggled via .mobile-nav-open */
     }
+
+    body.mobile-nav-open .navbar-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(15, 23, 42, 0.10);
+        padding: 1rem 1.5rem;
+        gap: 1rem;
+    }
+
+    body.mobile-nav-open .navbar-links li {
+        width: 100%;
+    }
+
 
     .hero-title {
         font-size: 2.5rem;

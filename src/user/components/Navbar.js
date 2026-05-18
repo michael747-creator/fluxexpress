@@ -9,18 +9,49 @@ function Navbar() {
             <Link to="/" className="navbar-brand">
                 <Logo size={40} showText={true} textColor="#ffffff" />
             </Link>
+
+            <button
+                className="navbar-hamburger"
+                type="button"
+                aria-label="Open menu"
+                onClick={() => {
+                    document.body.classList.toggle('mobile-nav-open');
+                }}
+            >
+                ☰
+            </button>
+
             <ul className="navbar-links">
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link
+                        to="/"
+                        onClick={() => document.body.classList.remove('mobile-nav-open')}
+                    >
+                        Home
+                    </Link>
                 </li>
                 <li>
-                    <a href="#features">Solutions</a>
+                    <a
+                        href="#features"
+                        onClick={() => document.body.classList.remove('mobile-nav-open')}
+                    >
+                        Solutions
+                    </a>
                 </li>
                 <li>
-                    <a href="#contact">Contact</a>
+                    <a
+                        href="#contact"
+                        onClick={() => document.body.classList.remove('mobile-nav-open')}
+                    >
+                        Contact
+                    </a>
                 </li>
                 <li>
-                    <Link to="/" className="navbar-track-btn">
+                    <Link
+                        to="/"
+                        className="navbar-track-btn"
+                        onClick={() => document.body.classList.remove('mobile-nav-open')}
+                    >
                         Track Shipment
                     </Link>
                 </li>
@@ -30,3 +61,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

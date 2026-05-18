@@ -24,7 +24,7 @@ function TrackingPage({ packages }) {
 
     if (!pkg) {
         return (
-            <div className="tracking-page" style={{ minHeight: '100vh', background: 'var(--bg-dark)' }}>
+            <div className="tracking-page" style={{ minHeight: '100vh', background: '#ffffff' }}>
                 <Navbar />
                 <div className="tracking-content" style={{ marginTop: '6rem', display: 'flex', justifyContent: 'center' }}>
                     <div className="not-found-card" style={{
@@ -46,7 +46,7 @@ function TrackingPage({ packages }) {
     }
 
     return (
-        <div className="tracking-page" style={{ minHeight: '100vh', background: 'var(--bg-dark)', paddingBottom: '4rem' }}>
+        <div className="tracking-page" style={{ minHeight: '100vh', background: '#ffffff', paddingBottom: '4rem' }}>
             <Navbar />
 
             {showWarning && (
