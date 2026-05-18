@@ -1,0 +1,12 @@
+﻿--- Original ChatHub.js
++++ Updated ChatHub.js
+@@ -14,7 +14,9 @@
+     onAdminSendMessage,
+     adminFileInputRef,
+     onAdminImageUpload,
+     isAdminUploading,
+-    onDeleteMessage
++    onDeleteMessage,
++    onChatTextChange,
++    onToggleChatStatus
+ }) => {

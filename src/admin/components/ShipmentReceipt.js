@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 
 const ShipmentReceipt = ({ pkg, onClose }) => {
   if (!pkg) return null;
@@ -11,12 +11,14 @@ const ShipmentReceipt = ({ pkg, onClose }) => {
     <div className="receipt-overlay">
       <div className="receipt-container no-print">
         <div className="receipt-actions">
-          <button className="print-btn" onClick={handlePrint}>🖨️ Print Receipt</button>
-          <button className="close-btn" onClick={onClose}>Close</button>
+          <button className="print-btn" onClick={handlePrint}>🖨️ Print</button>
+          <button className="close-btn" onClick={onClose}>✕</button>
         </div>
       </div>
 
-      <div className="receipt-card printable-content">
+
+      <div className="receipt-card">
+
         <div className="receipt-header">
           <div className="receipt-brand">
             <h1>Flux<span>Express</span></h1>

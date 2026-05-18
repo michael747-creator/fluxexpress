@@ -1,0 +1,229 @@
+import React, { useRef } from 'react';
+import '../../admin/styles/admin.css';
+
+const ChatHub = ({
+    chats = [],
+    chatSearchTerm,
+    onChatSearchChange,
+    activeChatId,
+    onChatSelect,
+    activeMessages = [],
+    adminChatText,
+    onAdminSendMessage,
+    adminFileInputRef,
+    onAdminImageUpload,
+    isAdminUploading,
+    onDeleteMessage
+}) => {
+    const messagesEndRef = useRef(null);
+
+    const filteredChats = chats.filter(chat =>
+        chat.trackingCode?.toLowerCase().includes(chatSearchTerm.toLowerCase()) ||
+        chat.userEmail?.toLowerCase().includes(chatSearchTerm.toLowerCase()) ||
+        chat.lastMessage?.toLowerCase().includes(chatSearchTerm.toLowerCase())
+    );
+
+    const handleChatSelect = (chatId) => {
+        onChatSelect(chatId);
+    };
+
+    const quickReplies = [
+        'Your package is on schedule 📦',
+        "We're investigating the delay 🔍",
+        'Package delivered successfully ✅',
+        'Estimated delivery updated 📅'
+    ];
+
+    const handleQuickReply = (text) => {
+        onAdminSendMessage(null, null, text); // Let parent handle
+    };
+
+    return (
+        <div className="chat-hub-container">
+            <aside className="chat-inbox">
+                <div className="inbox-header">
+                    <div className="inbox-header-top">
+                        <h3>Live Conversations ({chats.length})</h3>
+                        <input
+                            type="text"
+                            className="chat-search-input"
+                            placeholder="Search chats..."
+                            value={chatSearchTerm}
+                            onChange={(e) => onChatSearchChange(e.target.value)}
+                        />
+                    </div>
+                    <p className="inbox-subtitle">Active sessions</p>
+                </div>
+
+                <div className="inbox-list">
+                    {filteredChats.length > 0 ? (
+                        filteredChats.map(chat => (
+                            <div
+                                key={chat.id}
+                                className={`inbox-item ${activeChatId === chat.id ? 'active' : ''}`}
+                                onClick={() => handleChatSelect(chat.id)}
+                            >
+                                <div className="inbox-header-row">
+                                    <h4>
+                                        {chat.trackingCode ? (
+                                            <>
+                                                <span className="tracking-icon" aria-hidden="true">📦</span>
+                                                {chat.trackingCode}
+                                            </>
+                                        ) : (
+                                            chat.userEmail || 'Guest User'
+                                        )}
+                                    </h4>
+                                    <button
+                                        className={`chat-status-toggle ${chat.status === 'active' ? 'active' : 'closed'}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            // Parent handles updateDoc
+                                            window.dispatchEvent(new CustomEvent('toggleChatStatus', { detail: chat.id }));
+                                        }}
+                                        aria-label={`Toggle ${chat.status === 'active' ? 'close' : 'open'} chat`}
+                                    >
+                                        {chat.status === 'active' ? 'Active' : 'Closed'}
+                                    </button>
+                                </div>
+                                <p className="inbox-message">{chat.lastMessage}</p>
+                                {chat.unreadCount > 0 && (
+                                    <span className="unread-badge" aria-label={`${chat.unreadCount} unread messages`}>
+                                        {chat.unreadCount}
+                                    </span>
+                                )}
+                                <small className="inbox-time">
+                                    {chat.updatedAt?.toDate ?
+                                        chat.updatedAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) :
+                                        'Just now'
+                                    }
+                                </small>
+                            </div>
+                        ))
+                    ) : (
+                        <div style={{ padding: '2rem', textAlign: 'center', color: '#ccc' }}>
+                            No active chats
+                        </div>
+                    )}
+                </div>
+            </aside>
+
+            <section className="active-chat-window">
+                {activeChatId ? (
+                    <>
+                        <div className="chat-thread" role="log" aria-live="polite">
+                            {activeMessages.map(msg => (
+                                <div key={msg.id} className={`chat-msg-wrapper ${msg.sender === 'admin' ? 'wrapper-admin' : 'wrapper-user'}`}>
+                                    <button
+                                        className="msg-delete-btn"
+                                        title="Delete message"
+                                        onClick={() => onDeleteMessage(msg.id)}
+                                        aria-label="Delete message"
+                                    >
+                                        🗑️
+                                    </button>
+                                    <div className={msg.sender === 'admin' ? 'admin-bubble' : 'user-bubble'}>
+                                        {msg.imageUrl && (
+                                            <img
+                                                src={msg.imageUrl}
+                                                alt="attachment"
+                                                className="chat-bubble-image"
+                                                style={{ width: '100%', borderRadius: '8px', marginBottom: '8px' }}
+                                            />
+                                        )}
+                                        {msg.text && <div>{msg.text}</div>}
+                                        <span className="chat-time">
+                                            {msg.timestamp?.toDate ?
+                                                msg.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) :
+                                                '...'
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef} />
+                            {isAdminUploading && (
+                                <div className="admin-bubble" style={{ opacity: 0.7 }}>
+                                    📷 Uploading image...
+                                </div>
+                            )}
+                            {activeMessages.length === 0 && (
+                                <div style={{ textAlign: 'center', color: '#ccc', marginTop: '20%' }}>
+                                    Starting conversation...
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Quick Replies */}
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem', padding: '1rem' }}>
+                            {quickReplies.map((reply, idx) => (
+                                <button
+                                    key={idx}
+                                    type="button"
+                                    className="quick-reply-btn"
+                                    onClick={() => handleQuickReply(reply)}
+                                >
+                                    {reply}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Chat Footer */}
+                        <form className="admin-chat-footer" onSubmit={(e) => onAdminSendMessage(e)}>
+                            <input
+                                type="file"
+                                style={{ display: 'none' }}
+                                ref={adminFileInputRef}
+                                accept="image/*"
+                                onChange={onAdminImageUpload}
+                            />
+                            <button
+                                type="button"
+                                className="admin-attach-btn"
+                                onClick={() => adminFileInputRef.current?.click()}
+                                disabled={isAdminUploading}
+                                style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer' }}
+                                aria-label="Attach image"
+                            >
+                                📷
+                            </button>
+                            <input
+                                type="text"
+                                className="admin-chat-input"
+                                placeholder="Type your response or use quick replies above..."
+                                value={adminChatText}
+                                onChange={(e) => {/* parent handles */ }}
+                                disabled={isAdminUploading}
+                                autoComplete="off"
+                            />
+                            <button
+                                type="submit"
+                                className="admin-send-btn"
+                                disabled={isAdminUploading || !adminChatText.trim()}
+                                aria-label="Send message"
+                            >
+                                Send
+                            </button>
+                        </form>
+                    </>
+                ) : (
+                    <div style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ccc'
+                    }}>
+                        <span style={{ fontSize: '4rem', marginBottom: '1rem' }} aria-hidden="true">💬</span>
+                        <p>Select a conversation to start chatting</p>
+                    </div>
+                )}
+            </section>
+        </div>
+    );
+};
+
+export default ChatHub;
+
+

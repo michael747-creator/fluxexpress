@@ -26,11 +26,17 @@ function HomePage({ packages }) {
             <Navbar />
             
             <header className="hero-section center-hero">
+                {/* Hero Background Animation Elements */}
+                <div className="hero-bg-anim">
+                    <div className="bg-circle circle-1"></div>
+                    <div className="bg-circle circle-2"></div>
+                </div>
+
                 <div className="hero-content">
-                    <span className="hero-badge reveal">Next-Gen Logistics</span>
-                    <h1 className="hero-title reveal">Fast, Reliable, <span>Global</span> Logistics</h1>
+                    <span className="hero-badge reveal">Global Logistics Excellence</span>
+                    <h1 className="hero-title reveal">Reliable. Precise. <span>Global.</span></h1>
                     <p className="hero-subtitle reveal">
-                        Track your shipments in real-time with FluxExpress. We bridge distances with precision, speed, and absolute care for every parcel.
+                        Empowering global commerce with state-of-the-art logistics solutions. Track your assets across continents with millisecond precision and absolute transparency.
                     </p>
                     
                     <div className="tracking-card-premium reveal">
@@ -41,22 +47,22 @@ function HomePage({ packages }) {
 
             <section className="premium-stats section-reveal">
                 <div className="stat-box">
-                    <span className="stat-number">12M+</span>
-                    <span className="stat-label">Packages Delivered</span>
+                    <span className="stat-number">25M+</span>
+                    <span className="stat-label">Units Delivered</span>
                 </div>
                 <div className="stat-box">
-                    <span className="stat-number">200+</span>
-                    <span className="stat-label">Countries Active</span>
+                    <span className="stat-number">195+</span>
+                    <span className="stat-label">Nations Served</span>
                 </div>
                 <div className="stat-box">
-                    <span className="stat-number">99.9%</span>
-                    <span className="stat-label">Success Rate</span>
+                    <span className="stat-number">99.98%</span>
+                    <span className="stat-label">On-Time Arrival</span>
                 </div>
             </section>
 
             <section id="features" className="services-section">
-                <span className="section-tag section-reveal">Our Expertise</span>
-                <h2 className="section-title section-reveal">Premium Solutions for Global Trade</h2>
+                <span className="section-tag section-reveal">Our Core Capabilities</span>
+                <h2 className="section-title section-reveal">Supply Chain Solutions for Modern Enterprise</h2>
                 
                 <div className="services-grid">
                     <div className="service-card-luxury section-reveal">
@@ -64,8 +70,8 @@ function HomePage({ packages }) {
                             <img src={globalImg} alt="Global Shipping" />
                         </div>
                         <div className="service-info">
-                            <h3>Global Cargo Logistics</h3>
-                            <p>International air and sea freight with seamless customs clearance and real-time transit visibility.</p>
+                            <h3>International Freight</h3>
+                            <p>Seamless air and maritime cargo solutions with integrated customs brokerage and last-mile connectivity.</p>
                         </div>
                     </div>
 
@@ -74,8 +80,8 @@ function HomePage({ packages }) {
                             <img src={heroImg} alt="Express Delivery" />
                         </div>
                         <div className="service-info">
-                            <h3>Elite Express Courier</h3>
-                            <p>Priority same-day and next-day delivery for urgent documents and high-value domestic shipments.</p>
+                            <h3>Priority Express</h3>
+                            <p>Mission-critical delivery services for high-priority documents and assets, ensuring same-day global transit.</p>
                         </div>
                     </div>
 
@@ -84,28 +90,28 @@ function HomePage({ packages }) {
                             <img src={secureImg} alt="Secure Handling" />
                         </div>
                         <div className="service-info">
-                            <h3>Secure & Bonded Handling</h3>
-                            <p>Specialized white-glove service for fragile, high-value, and temperature-sensitive assets.</p>
+                            <h3>Asset Protection</h3>
+                            <p>Specialized handling for sensitive, fragile, or high-value inventory with real-time environmental monitoring.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section className="reviews-section">
-                <span className="section-tag section-reveal">Testimonials</span>
-                <h2 className="section-title section-reveal">Trusted by Global Leaders</h2>
+                <span className="section-tag section-reveal">Global Trust</span>
+                <h2 className="section-title section-reveal">Preferred by Industry Leaders</h2>
                 
                 <div className="reviews-grid">
                     <div className="review-card section-reveal">
                         <div className="stars">★★★★★</div>
                         <p className="review-text">
-                            "FluxExpress has completely transformed our supply chain. Their real-time tracking is the most accurate we've ever used."
+                            "FluxExpress has fundamentally optimized our distribution network. Their transparency and reliability are unmatched in the sector."
                         </p>
                         <div className="customer-info">
                             <img src={avatar1} alt="Customer" className="customer-image" />
                             <div className="customer-meta">
                                 <h4>Sarah Jenkins</h4>
-                                <p>Supply Chain Director, TechFlow</p>
+                                <p>VP of Operations, TechFlow Corp</p>
                             </div>
                         </div>
                     </div>
@@ -113,13 +119,13 @@ function HomePage({ packages }) {
                     <div className="review-card section-reveal">
                         <div className="stars">★★★★★</div>
                         <p className="review-text">
-                            "Reliable, fast, and professional. Their customer support team actually answers the phone. Highly recommended!"
+                            "The accuracy of their tracking system and the responsiveness of their support team make them our primary logistics partner."
                         </p>
                         <div className="customer-info">
                             <img src={avatar2} alt="Customer" className="customer-image" />
                             <div className="customer-meta">
                                 <h4>Marcus Reed</h4>
-                                <p>Founder, Global Retail Inc.</p>
+                                <p>Supply Chain Lead, Global Retail Inc.</p>
                             </div>
                         </div>
                     </div>
@@ -127,13 +133,13 @@ function HomePage({ packages }) {
                     <div className="review-card section-reveal">
                         <div className="stars">★★★★★</div>
                         <p className="review-text">
-                            "Best-in-class logistics service. We've seen a 30% reduction in delivery times since switching to FluxExpress."
+                            "Transitioning to FluxExpress reduced our transit delays by 40%. They truly understand the demands of global trade."
                         </p>
                         <div className="customer-info">
                             <img src={avatar1} alt="Customer" className="customer-image" />
                             <div className="customer-meta">
                                 <h4>Elena Petrov</h4>
-                                <p>Logistics Manager, EuroTrans</p>
+                                <p>Director of Logistics, EuroTrans Group</p>
                             </div>
                         </div>
                     </div>
@@ -144,38 +150,38 @@ function HomePage({ packages }) {
                 <div className="footer-grid">
                     <div className="footer-about">
                         <h2>Flux<span>Express</span></h2>
-                        <p>We are a global leader in logistics, providing innovative shipping solutions for businesses and individuals worldwide.</p>
+                        <p>Leading the future of global logistics with innovation, technology, and a commitment to excellence in every shipment.</p>
                     </div>
                     <div className="footer-col">
-                        <h4>Services</h4>
+                        <h4>Solutions</h4>
                         <ul>
-                            <li>Express Shipping</li>
-                            <li>Freight Transport</li>
-                            <li>Warehousing</li>
-                            <li>Last Mile Delivery</li>
+                            <li><a href="#">Express Delivery</a></li>
+                            <li><a href="#">Freight Management</a></li>
+                            <li><a href="#">Smart Warehousing</a></li>
+                            <li><a href="#">E-commerce Logistics</a></li>
                         </ul>
                     </div>
                     <div className="footer-col">
-                        <h4>Company</h4>
+                        <h4>Corporate</h4>
                         <ul>
-                            <li>About Us</li>
-                            <li>Careers</li>
-                            <li>Sustainability</li>
-                            <li>Newsroom</li>
+                            <li><a href="#">About FluxExpress</a></li>
+                            <li><a href="#">Global Network</a></li>
+                            <li><a href="#">Sustainability</a></li>
+                            <li><a href="#">Investor Relations</a></li>
                         </ul>
                     </div>
                     <div className="footer-col">
                         <h4>Support</h4>
                         <ul>
-                            <li>Tracking Help</li>
-                            <li>Shipping Guide</li>
-                            <li>Contact Us</li>
-                            <li>Privacy Policy</li>
+                            <li><a href="#">Track a Shipment</a></li>
+                            <li><a href="#">Service Guide</a></li>
+                            <li><a href="#">Contact Support</a></li>
+                            <li><a href="#">Developer API</a></li>
                         </ul>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>© 2026 FluxExpress Logistics Group. All rights reserved.</p>
+                    <p>© 2026 FluxExpress Logistics International. All rights reserved. Registered ISO 9001:2015.</p>
                 </div>
             </footer>
         </div>

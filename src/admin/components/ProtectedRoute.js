@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children, user }) {
-    if (!user) {
+function ProtectedRoute({ children }) {
+    const token = localStorage.getItem('fluxAdminToken');
+    if (!token) {
         return <Navigate to="/admin/login" replace />;
     }
-
     return children;
 }
 

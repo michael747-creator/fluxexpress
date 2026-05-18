@@ -11,36 +11,28 @@ function TrackingForm({ packages }) {
         e.preventDefault();
         const trimmed = trackingCode.trim();
         if (!trimmed) {
-            setError("Please enter a tracking code.");
+            setError("Please enter a valid tracking number.");
             return;
         }
         setError("");
         navigate(`/track/${trimmed}`);
     };
 
-    const fillSample = (code) => {
-        setTrackingCode(code);
-        setError("");
-    };
-
-    // Get up to 3 sample codes from current packages
-    const samplePackages = packages ? packages.slice(0, 3) : [];
-
     return (
-        <div className="tracking-form-inner">
+        <div className="tracking-form-inner" style={{ width: '100%' }}>
             <form className="tracking-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
                     className="tracking-input-modern"
-                    placeholder="Enter your tracking code (e.g. FX-2026-001)"
+                    placeholder="Enter Tracking ID (e.g. FX-2026-001)"
                     value={trackingCode}
                     onChange={(e) => setTrackingCode(e.target.value)}
                 />
                 <button type="submit" className="btn-primary-glow">
-                    Track Now
+                    Search Now
                 </button>
             </form>
-            {error && <p className="tracking-error">⚠️ {error}</p>}
+            {error && <p className="tracking-error" style={{ color: '#f87171', fontSize: '0.85rem', marginTop: '0.75rem', fontWeight: '600' }}>⚠️ {error}</p>}
         </div>
     );
 }

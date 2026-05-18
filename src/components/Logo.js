@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo = ({ size = 40, color = "#e94560", showText = false, textColor = "#ffffff", className = "" }) => {
+const Logo = ({ size = 40, color = "#6366f1", showText = false, textColor = "#ffffff", className = "" }) => {
   return (
     <div className={`logo-wrapper ${className}`} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <svg 
@@ -9,7 +9,7 @@ const Logo = ({ size = 40, color = "#e94560", showText = false, textColor = "#ff
         viewBox="0 0 100 100" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
-        style={{ filter: 'drop-shadow(0 0 8px rgba(233, 69, 96, 0.3))' }}
+        style={{ filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.3))' }}
       >
         {/* Abstract Background Element */}
         <path d="M20 10L80 20L70 90L10 80Z" fill={color} fillOpacity="0.1" />

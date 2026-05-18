@@ -7,21 +7,21 @@ function Navbar() {
     return (
         <nav className="user-navbar">
             <Link to="/" className="navbar-brand">
-                <Logo size={42} showText={true} />
+                <Logo size={40} showText={true} textColor="#ffffff" />
             </Link>
             <ul className="navbar-links">
                 <li>
                     <Link to="/">Home</Link>
                 </li>
                 <li>
-                    <a href="#features">Services</a>
+                    <a href="#features">Solutions</a>
                 </li>
                 <li>
                     <a href="#contact">Contact</a>
                 </li>
                 <li>
                     <Link to="/" className="navbar-track-btn">
-                        Track Package
+                        Track Shipment
                     </Link>
                 </li>
             </ul>

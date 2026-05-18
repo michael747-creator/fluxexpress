@@ -10,8 +10,20 @@ function SupportButton({ trackingCode }) {
     const [inputText, setInputText] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [sessionId, setSessionId] = useState(null);
+    const [showGreeting, setShowGreeting] = useState(false);
     const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        // Show greeting after 3 seconds if chat is not already open
+        const timer = setTimeout(() => {
+            if (!isOpen) {
+                setShowGreeting(true);
+            }
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [isOpen]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -104,11 +116,30 @@ function SupportButton({ trackingCode }) {
         }
     };
 
+    const handleOpenChat = () => {
+        setIsOpen(true);
+        setShowGreeting(false);
+    };
+
     return (
         <>
+            {showGreeting && !isOpen && (
+                <div className="support-greeting-bubble" onClick={handleOpenChat}>
+                    <div className="greeting-close" onClick={(e) => {
+                        e.stopPropagation();
+                        setShowGreeting(false);
+                    }}>×</div>
+                    <div className="greeting-avatar">👋</div>
+                    <div className="greeting-text">
+                        <strong>Support Team</strong>
+                        <p>Welcome to FluxExpress! How can we help you today?</p>
+                    </div>
+                </div>
+            )}
+
             <button
                 className="support-floating-btn"
-                onClick={() => setIsOpen(true)}
+                onClick={handleOpenChat}
                 title="Live Support"
             >
                 💬
@@ -122,7 +153,7 @@ function SupportButton({ trackingCode }) {
                             <div style={{ flex: 1 }}>
                                 <h2>FluxExpress Support</h2>
                                 {trackingCode && (
-                                    <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                                         📦 Re: Shipment {trackingCode}
                                     </div>
                                 )}
@@ -136,7 +167,7 @@ function SupportButton({ trackingCode }) {
 
                         <div className="chat-messages">
                             {messages.length === 0 && (
-                                <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', marginTop: '2rem' }}>
+                                <div style={{ textAlign: 'center', color: 'var(--text-muted)', marginTop: '2rem' }}>
                                     <p>{trackingCode
                                         ? `Ask us anything about shipment ${trackingCode}`
                                         : 'Welcome! How can we help you today?'
