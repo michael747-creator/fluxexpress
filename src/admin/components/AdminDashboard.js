@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { statusLabels, statusColors } from "../../data/packages";
+import { statusLabels } from "../../data/packages";
 import { db, auth, storage } from "../../firebase";
 import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, arrayUnion } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -14,7 +14,6 @@ import ChatHub from "./ChatHub";
 import AddPackageModal from "./AddPackageModal";
 import StatusUpdaterModal from "./StatusUpdaterModal";
 import CustomsWarningModal from "./CustomsWarningModal";
-import Logo from "../../components/Logo";
 import "../../admin/styles/admin.css";
 
 function AdminDashboard({ packages }) {
@@ -76,10 +75,18 @@ function AdminDashboard({ packages }) {
                 ...doc.data()
             }));
             // Add unread count logic for admin messages
-            const chatsWithCounts = chatList.map(chat => ({
-                ...chat,
-                unreadCount: chat.lastAdminMessageAt && chat.updatedAt && (chat.lastAdminMessageAt.seconds < chat.updatedAt.seconds) ? 1 : 0  // eslint-disable-line no-mixed-operators
-            }));
+            const chatsWithCounts = chatList.map(chat => {
+                const hasUnreadAdminMessage = Boolean(
+                    chat.lastAdminMessageAt &&
+                    chat.updatedAt &&
+                    chat.lastAdminMessageAt.seconds < chat.updatedAt.seconds
+                );
+
+                return {
+                    ...chat,
+                    unreadCount: hasUnreadAdminMessage ? 1 : 0,
+                };
+            });
 
 
             setChats(chatsWithCounts.sort((a, b) => (b.updatedAt?.seconds || 0) - (a.updatedAt?.seconds || 0)));
@@ -111,7 +118,7 @@ function AdminDashboard({ packages }) {
         if (e) e.preventDefault();
 
         const text = quickReplyText || adminChatText;
-        if (!text.trim() && !imageUrl || !activeChatId) return;
+        if ((!text.trim() && !imageUrl) || !activeChatId) return;
 
         if (!quickReplyText) setAdminChatText("");
 
@@ -391,11 +398,6 @@ function AdminDashboard({ packages }) {
         }
     };
 
-
-    const filteredPackages = packages.filter(pkg =>
-        pkg.trackingCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pkg.recipient.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     return (
         <div className="admin-layout">

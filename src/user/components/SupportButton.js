@@ -122,9 +122,25 @@ function SupportButton({ trackingCode }) {
     };
 
     return (
-        <>
+        <div
+            className="support-chat-widget-root"
+            style={{
+                position: 'fixed',
+                bottom: '20px',
+                right: '20px',
+                zIndex: 9999,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                gap: '0.75rem',
+            }}
+        >
             {showGreeting && !isOpen && (
-                <div className="support-greeting-bubble" onClick={handleOpenChat}>
+                <div
+                    className="support-greeting-bubble"
+                    onClick={handleOpenChat}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="greeting-close" onClick={(e) => {
                         e.stopPropagation();
                         setShowGreeting(false);
@@ -132,7 +148,7 @@ function SupportButton({ trackingCode }) {
                     <div className="greeting-avatar">👋</div>
                     <div className="greeting-text">
                         <strong>Support Team</strong>
-                        <p>Welcome to FluxExpress! How can we help you today?</p>
+                        <p>👋 Welcome to FluxExpress Support! Need help tracking a shipment or have a question? We're here 24/7 — start a chat!</p>
                     </div>
                 </div>
             )}
@@ -141,12 +157,25 @@ function SupportButton({ trackingCode }) {
                 className="support-floating-btn"
                 onClick={handleOpenChat}
                 title="Live Support"
+                style={{ cursor: 'pointer' }}
             >
                 💬
             </button>
 
             {isOpen && (
-                <div className="support-modal-overlay" onClick={() => setIsOpen(false)}>
+                <div
+                    className="support-modal-overlay"
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(0, 0, 0, 0.65)',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-end',
+                        padding: '20px',
+                    }}
+                >
                     <div className="support-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="chat-header">
                             <div className="chat-status-dot"></div>
@@ -225,7 +254,7 @@ function SupportButton({ trackingCode }) {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

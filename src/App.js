@@ -5,11 +5,10 @@ import TrackingPage from './user/components/TrackingPage';
 import AdminLogin from './admin/components/AdminLogin';
 import AdminDashboard from './admin/components/AdminDashboard';
 import ProtectedRoute from './admin/components/ProtectedRoute';
-import SupportButton from './user/components/SupportButton';
+import SupportChatWidget from './components/SupportChatWidget';
 import { db, auth } from './firebase';
-import { collection, onSnapshot, query, orderBy, addDoc, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { packagesData } from './data/packages';
 import './App.css';
 
 function App() {
@@ -116,7 +115,7 @@ function App() {
         // Extract tracking code from /track/:code URL
         const match = location.pathname.match(/^\/track\/(.+)$/);
         const code = match ? match[1] : null;
-        return <SupportButton trackingCode={code} />;
+        return <SupportChatWidget trackingCode={code} />;
       })()}
     </div>
   );
