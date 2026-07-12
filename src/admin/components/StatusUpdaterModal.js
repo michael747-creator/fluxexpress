@@ -12,9 +12,8 @@ const StatusUpdaterModal = ({
     if (!pkg) return null;
 
     const handleStatusSelect = (status) => {
+        // Update only local form state; persist to Firestore on Save Update.
         onStatusFormChange({ ...statusForm, status });
-        // Call parent update directly if location is already set or just to pick the status
-        onStatusUpdate(pkg.id, pkg.firestoreId, status, statusForm.location, statusForm.description);
     };
 
     return (
@@ -53,13 +52,22 @@ const StatusUpdaterModal = ({
                                 onChange={(e) => onStatusFormChange({ ...statusForm, description: e.target.value })}
                             />
                         </div>
+                        <div className="form-group-light">
+                            <label>Next Milestone</label>
+                            <input
+                                type="text"
+                                placeholder="e.g., Out for Delivery"
+                                value={statusForm.nextMilestone || ''}
+                                onChange={(e) => onStatusFormChange({ ...statusForm, nextMilestone: e.target.value })}
+                            />
+                        </div>
                     </div>
 
                     <label style={{ fontSize: '0.875rem', fontWeight: 700, display: 'block', marginBottom: '1rem' }}>SELECT NEW OPERATIONAL STATUS</label>
-                    <div style={{ 
-                        display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
-                        gap: '1rem' 
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                        gap: '1rem'
                     }}>
                         {Object.entries(statusLabels).map(([key, label]) => (
                             <button
@@ -83,23 +91,23 @@ const StatusUpdaterModal = ({
                                 }}
                             >
                                 {pkg.currentStatus === key && (
-                                    <div style={{ 
-                                        position: 'absolute', 
-                                        top: 0, 
-                                        right: 0, 
-                                        background: statusColors[key], 
-                                        color: 'white', 
-                                        fontSize: '0.625rem', 
-                                        padding: '2px 8px', 
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 0,
+                                        background: statusColors[key],
+                                        color: 'white',
+                                        fontSize: '0.625rem',
+                                        padding: '2px 8px',
                                         borderBottomLeftRadius: '8px',
                                         fontWeight: 800
                                     }}>CURRENT</div>
                                 )}
-                                <div style={{ 
-                                    width: '8px', 
-                                    height: '8px', 
-                                    borderRadius: '50%', 
-                                    background: statusColors[key] 
+                                <div style={{
+                                    width: '8px',
+                                    height: '8px',
+                                    borderRadius: '50%',
+                                    background: statusColors[key]
                                 }}></div>
                                 <div style={{ fontWeight: 700, fontSize: '0.875rem' }}>{label}</div>
                             </button>
@@ -108,7 +116,36 @@ const StatusUpdaterModal = ({
                 </div>
 
                 <div className="modal-footer">
-                    <button className="btn btn-secondary" onClick={onClose}>Close</button>
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', width: '100%', marginTop: '2rem' }}>
+                        <button
+                            onClick={async () => {
+                                // Persist to Firestore on Save Update.
+                                // status is stored in statusForm.status after clicking a card.
+                                await onStatusUpdate(
+                                    pkg.id,
+                                    pkg.firestoreId,
+                                    statusForm.status,
+                                    statusForm.location,
+                                    statusForm.description,
+                                    statusForm.nextMilestone
+                                );
+                                onClose();
+                            }}
+                            style={{
+                                background: '#7c3aed',
+                                color: '#fff',
+                                padding: '0.8rem 1.5rem',
+                                border: 'none',
+                                borderRadius: '6px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Save Update
+                        </button>
+                        <button className="btn btn-secondary" onClick={onClose} style={{ background: '#6b7280', color: '#fff', padding: '0.8rem 1.5rem', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
             <style>

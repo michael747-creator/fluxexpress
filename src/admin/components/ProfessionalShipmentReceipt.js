@@ -38,10 +38,10 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
 
     return (
         <div className="modal-overlay" style={{ background: 'rgba(0,0,0,0.85)', padding: '1rem' }}>
-            <div className="no-print" style={{ 
-                position: 'fixed', 
-                top: '20px', 
-                right: '20px', 
+            <div className="no-print" style={{
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
                 zIndex: 4000,
                 display: 'flex',
                 gap: '10px'
@@ -75,7 +75,7 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
                         </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                        <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, letterSpacing: '2px', color: '#1e293b' }}>WAYBILL / RECEIPT</h1>
+                        <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, letterSpacing: '2px', color: '#1e293b' }}>RECEIPT</h1>
                         <div style={{ marginTop: '0.5rem' }}>
                             <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>TRACKING NUMBER</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#6366f1' }}>{pkg.trackingCode}</div>
@@ -119,6 +119,7 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
                                 <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b' }}>WEIGHT</th>
                                 <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b' }}>EST. DELIVERY</th>
                                 <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b' }}>SERVICE</th>
+                                <th style={{ padding: '0.75rem 1rem', fontSize: '0.75rem', color: '#64748b' }}>SHIPMENT FEE</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,10 +127,16 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
                                 <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9', fontWeight: 600 }}>{pkg.description}</td>
                                 <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>{pkg.weight}</td>
                                 <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>{pkg.estimatedDelivery}</td>
-                                <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>Express Global</td>
+                                <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>{pkg.service || 'Express Global'}</td>
+                                <td style={{ padding: '1rem', borderBottom: '1px solid #f1f5f9' }}>${Number(pkg.shipmentFee || 0).toFixed(2)}</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+                        <div style={{ fontWeight: 700, color: '#1e293b' }}>TOTAL SHIPMENT FEE:</div>
+                        <div style={{ fontWeight: 800, color: '#6366f1' }}>${Number(pkg.shipmentFee || 0).toFixed(2)}</div>
+                    </div>
                 </div>
 
                 {/* Recent Activity */}
@@ -151,10 +158,10 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
                 {/* Footer Section */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderTop: '2px solid #f1f5f9', paddingTop: '2rem' }}>
                     <div style={{ textAlign: 'center' }}>
-                        <div style={{ 
-                            fontFamily: 'monospace', 
-                            fontSize: '2rem', 
-                            letterSpacing: '-2px', 
+                        <div style={{
+                            fontFamily: 'monospace',
+                            fontSize: '2rem',
+                            letterSpacing: '-2px',
                             lineHeight: 1,
                             marginBottom: '0.5rem'
                         }}>
@@ -163,7 +170,7 @@ const ProfessionalShipmentReceipt = ({ pkg, onClose }) => {
                         <div style={{ fontWeight: 700, letterSpacing: '4px', fontSize: '0.875rem' }}>{pkg.trackingCode}</div>
                     </div>
                     <div style={{ textAlign: 'right', fontSize: '0.75rem', color: '#94a3b8', maxWidth: '300px' }}>
-                        This is a computer generated waybill for tracking purposes. Subject to terms and conditions of carriage. 
+                        This is a computer generated receipt for tracking purposes. Subject to terms and conditions of carriage.
                         Scan at any FluxExpress terminal to update status.
                         <div style={{ marginTop: '1rem', color: '#1e293b', fontWeight: 700 }}>© 2024 FluxExpress Logistics International</div>
                     </div>

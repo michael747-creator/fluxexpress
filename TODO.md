@@ -1,10 +1,9 @@
-# Admin Login Fix & Modern UI Plan
+# TODO
 
-## Steps:
-- [x] Create TODO.md
-- [x] Edit src/admin/components/AdminLogin.js (local auth + modern UI redesign)
-- [x] Edit src/admin/components/ProtectedRoute.js (localStorage check)
-- [x] Edit src/admin/components/Sidebar.js (clear token on logout)
-- [x] Test login at /admin/login with admin/fluxexpress123
-- [x] Verify dashboard access & logout
-- [x] Complete task
+- [ ] Inspect `src/App.js` routes and imports.
+- [x] Implement React Router code splitting in `src/App.js` using `React.lazy()` + `Suspense`.
+- [x] Wrap each route element with `Suspense` fallbacks.
+
+- [ ] Ensure existing app-level loading/error logic remains intact.
+- [ ] Run tests / build to confirm no runtime or compilation errors.
+

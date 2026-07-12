@@ -96,6 +96,8 @@ function TrackingPage({ packages }) {
                     reference: pkg.reference,
                     contact: pkg.recipient?.phone,
                 }}
+                currentLocation={pkg.currentLocation}
+                nextMilestone={pkg.nextMilestone}
             />
 
             <div className="tracking-search-cta mx-auto mt-10 max-w-4xl rounded-[28px] border border-white/10 bg-slate-950/90 p-6 shadow-2xl shadow-slate-950/30 sm:p-8" style={{ marginTop: '2rem' }}>

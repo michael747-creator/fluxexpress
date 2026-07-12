@@ -24,7 +24,7 @@ function AdminDashboard({ packages }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [chatSearchTerm, setChatSearchTerm] = useState("");
-    const [statusForm, setStatusForm] = useState({ location: "", description: "" });
+    const [statusForm, setStatusForm] = useState({ location: "", description: "", status: null });
     const [showReceipt, setShowReceipt] = useState(false);
     const [receiptData, setReceiptData] = useState(null);
     const [chats, setChats] = useState([]);
@@ -171,6 +171,7 @@ function AdminDashboard({ packages }) {
     const [formData, setFormData] = useState({
         description: "",
         weight: "",
+        shipmentFee: 0,
         senderName: "",
         senderAddress: "",
         recipientName: "",
@@ -204,6 +205,7 @@ function AdminDashboard({ packages }) {
         setFormData({
             description: "",
             weight: "",
+            shipmentFee: 0,
             senderName: "",
             senderAddress: "",
             recipientName: "",
@@ -246,6 +248,7 @@ function AdminDashboard({ packages }) {
                 },
                 description: formData.description,
                 weight: formData.weight,
+                shipmentFee: formData.shipmentFee || 0,
                 estimatedDelivery: formData.estimatedDelivery || "TBD",
                 currentStatus: "picked_up",
                 events: [initialEvent],
@@ -296,6 +299,7 @@ function AdminDashboard({ packages }) {
         setFormData({
             description: pkg.description,
             weight: pkg.weight,
+            shipmentFee: pkg.shipmentFee || 0,
             senderName: pkg.sender.name,
             senderAddress: pkg.sender.address,
             recipientName: pkg.recipient.name,
@@ -313,6 +317,7 @@ function AdminDashboard({ packages }) {
             const updatedData = {
                 description: formData.description,
                 weight: formData.weight,
+                shipmentFee: formData.shipmentFee || 0,
                 sender: { ...selectedPackage.sender, name: formData.senderName, address: formData.senderAddress },
                 recipient: { ...selectedPackage.recipient, name: formData.recipientName, address: formData.recipientAddress, phone: formData.recipientPhone },
                 estimatedDelivery: formData.estimatedDelivery
@@ -328,10 +333,10 @@ function AdminDashboard({ packages }) {
         }
     };
 
-    const updatePackageStatus = async (pkgId, firestoreId, newStatus, location, description) => {
+    const updatePackageStatus = async (pkgId, firestoreId, newStatus, location, description, nextMilestone) => {
         if (newStatus === 'custom_clearance') {
             // Show customs warning popup instead of direct update
-            setPendingStatusUpdate({ pkgId, firestoreId, location, description });
+            setPendingStatusUpdate({ pkgId, firestoreId, location, description, nextMilestone });
             setTempCustomsWarning(customsWarning);
             setShowCustomsPopup(true);
             return;
@@ -350,6 +355,10 @@ function AdminDashboard({ packages }) {
 
             await updateDoc(pkgRef, {
                 currentStatus: newStatus,
+                currentLocation: location || "",
+                nextMilestone: nextMilestone || "",
+                status: newStatus,
+                lastUpdated: new Date(),
                 events: arrayUnion(newEvent),
             });
 
@@ -384,6 +393,10 @@ function AdminDashboard({ packages }) {
 
             await updateDoc(pkgRef, {
                 currentStatus: 'custom_clearance',
+                currentLocation: pendingStatusUpdate.location || "",
+                nextMilestone: pendingStatusUpdate.nextMilestone || "",
+                status: 'custom_clearance',
+                lastUpdated: new Date(),
                 events: arrayUnion(newEvent),
             });
 

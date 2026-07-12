@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import HomePage from './user/components/HomePage';
-import TrackingPage from './user/components/TrackingPage';
-import AdminLogin from './admin/components/AdminLogin';
-import AdminDashboard from './admin/components/AdminDashboard';
+import { collection, onSnapshot, query, orderBy, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+
 import ProtectedRoute from './admin/components/ProtectedRoute';
 import SupportChatWidget from './components/SupportChatWidget';
 import { db, auth } from './firebase';
-import { collection, onSnapshot, query, orderBy, getDocs } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
 import './App.css';
+
+const HomePage = lazy(() => import('./user/components/HomePage'));
+const TrackingPage = lazy(() => import('./user/components/TrackingPage'));
+const AdminLogin = lazy(() => import('./admin/components/AdminLogin'));
+const AdminDashboard = lazy(() => import('./admin/components/AdminDashboard'));
 
 function App() {
   const [packages, setPackages] = useState([]);
@@ -89,27 +91,59 @@ function App() {
     return <div className="loading-screen">Loading FluxExpress Dashboard...</div>;
   }
 
+  const routeFallback = <div>Loading...</div>;
+
   return (
     <div className="App">
       <Routes>
         {/* User Routes */}
-        <Route path="/" element={<HomePage packages={packages} />} />
-        <Route path="/track/:code" element={<TrackingPage packages={packages} />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={routeFallback}>
+              <HomePage packages={packages} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/track/:code"
+          element={
+            <Suspense fallback={routeFallback}>
+              <TrackingPage packages={packages} />
+            </Suspense>
+          }
+        />
 
         {/* Admin Routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/login"
+          element={
+            <Suspense fallback={routeFallback}>
+              <AdminLogin />
+            </Suspense>
+          }
+        />
         <Route
           path="/admin/dashboard"
           element={
-            <ProtectedRoute user={authUser}>
-              <AdminDashboard packages={packages} />
-            </ProtectedRoute>
+            <Suspense fallback={routeFallback}>
+              <ProtectedRoute user={authUser}>
+                <AdminDashboard packages={packages} />
+              </ProtectedRoute>
+            </Suspense>
           }
         />
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
 
         {/* Fallback */}
-        <Route path="*" element={<HomePage packages={packages} />} />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={routeFallback}>
+              <HomePage packages={packages} />
+            </Suspense>
+          }
+        />
       </Routes>
       {!isAdminPath && (() => {
         // Extract tracking code from /track/:code URL

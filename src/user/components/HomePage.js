@@ -94,7 +94,7 @@ function HomePage({ packages }) {
                 <div className="services-grid">
                     <div className="service-card-luxury section-reveal">
                         <div className="service-image">
-                            <img src={globalImg} alt="Global Shipping" />
+                            <img src={globalImg} alt="Global Shipping" loading="lazy" width="320" height="220" />
                         </div>
                         <div className="service-info">
                             <h3>Global Freight Management</h3>

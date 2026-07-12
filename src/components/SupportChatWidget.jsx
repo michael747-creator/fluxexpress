@@ -204,6 +204,9 @@ function SupportChatWidget({ trackingCode }) {
                                                     src={message.imageUrl}
                                                     alt="attachment"
                                                     className="support-chat-image"
+                                                    loading="lazy"
+                                                    width="320"
+                                                    height="240"
                                                 />
                                             </div>
                                         )}

@@ -65,6 +65,16 @@ const AddPackageModal = ({
                                     onChange={(e) => onChange({ ...formData, estimatedDelivery: e.target.value })}
                                 />
                             </div>
+                            <div className="form-group-light">
+                                <label>Shipment Fee ($)</label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="e.g., 1000.00"
+                                    value={formData.shipmentFee || ''}
+                                    onChange={(e) => onChange({ ...formData, shipmentFee: parseFloat(e.target.value) || 0 })}
+                                />
+                            </div>
                         </div>
 
                         <div

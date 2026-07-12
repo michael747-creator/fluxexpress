@@ -66,7 +66,8 @@ const getStatusBadge = (status) => {
     return statusMeta[status]?.badgeClass || statusMeta.default.badgeClass;
 };
 
-export default function TrackingDisplay({ trackingId, status, stages = [], description, consignment = {} }) {
+export default function TrackingDisplay({ trackingId, status, stages = [], description, consignment = {}, currentLocation, nextMilestone }) {
+
     const [copied, setCopied] = useState(false);
 
     const stageTimeline = useMemo(() => {
@@ -281,11 +282,11 @@ export default function TrackingDisplay({ trackingId, status, stages = [], descr
                             <div className="mt-4 space-y-4">
                                 <div className="flex items-center justify-between rounded-3xl bg-slate-900/80 p-4">
                                     <span className="text-sm text-slate-400">Current location</span>
-                                    <span className="text-sm font-semibold text-slate-100">{stageTimeline.find((stage) => stage.completed)?.location || "Tracking data unavailable"}</span>
+                                    <span className="text-sm font-semibold text-slate-100">{currentLocation || "Tracking data unavailable"}</span>
                                 </div>
                                 <div className="flex items-center justify-between rounded-3xl bg-slate-900/80 p-4">
                                     <span className="text-sm text-slate-400">Next milestone</span>
-                                    <span className="text-sm font-semibold text-slate-100">{stageTimeline.find((stage) => !stage.completed)?.label || "Complete"}</span>
+                                    <span className="text-sm font-semibold text-slate-100">{nextMilestone || "Package Registered"}</span>
                                 </div>
                             </div>
                         </div>
