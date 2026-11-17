@@ -244,8 +244,8 @@ function HomePage({ packages }) {
                     <ul>
                         <li><a href="#features">About Us</a></li>
                         <li><a href="#contact" onClick={openSupportChat}>Contact</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#contact">Careers</a></li>
+                        <li><a href="#contact">Compliance</a></li>
                     </ul>
                 </div>
                 <div className="footer-col">
@@ -254,7 +254,7 @@ function HomePage({ packages }) {
                         <li><a href="#contact" onClick={openSupportChat}>Track Shipment</a></li>
                         <li><a href="#contact" onClick={openSupportChat}>Help Center</a></li>
                         <li><a href="mailto:support@fluxexpress.com">Email Support</a></li>
-                        <li><a href="#" onClick={openSupportChat}>Live Chat</a></li>
+                        <li><a href="#contact" onClick={openSupportChat}>Live Chat</a></li>
                     </ul>
                 </div>
             </section>
