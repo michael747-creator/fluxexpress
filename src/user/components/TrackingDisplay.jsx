@@ -110,7 +110,7 @@ export default function TrackingDisplay({ trackingId, status, stages = [], descr
             completed: index <= inferredLastCompletedIndex,
             current: index === nextIncompleteIndex && index > inferredLastCompletedIndex,
         }));
-    }, [stages]);
+    }, [stages, status]);
 
     const copyToClipboard = async () => {
         if (!trackingId) {
